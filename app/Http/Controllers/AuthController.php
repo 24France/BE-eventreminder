@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,5 +67,13 @@ class AuthController extends Controller
             Log::error('Error occurred during user registration', ['exception' => $e]);
             return response()->json(['message' => 'Error occurred during user registration'], 500);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        // Invalidate the user's current Sanctum token
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }
